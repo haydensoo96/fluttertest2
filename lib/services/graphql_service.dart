@@ -1,6 +1,8 @@
 import 'package:graphql/client.dart';
+import 'package:get/get.dart';
 
-class GraphQLService {
+class GraphQLService extends GetxController{
+  
   static HttpLink httpLink = HttpLink(
     "http://54.169.229.77/v1/graphql",
   );

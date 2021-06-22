@@ -26,6 +26,8 @@ dependencies:
   graphql: ^5.0.0
   localstorage: ^4.0.0+1
   provider: ^5.0.0
+  get:
+  get_storage:
   
 
 

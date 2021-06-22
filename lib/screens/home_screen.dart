@@ -1,19 +1,45 @@
+import 'dart:js';
+
 import 'package:core_flutter/services/graphql_service.dart';
 import 'package:core_flutter/services/queries/recipes.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql/client.dart';
 import 'package:provider/provider.dart';
+import 'package:get/get.dart';
+import 'dart:developer';
 
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
+class PassData extends GetxController {
+  final gs = Get.find<GraphQLService>();
+  var homeData = <Future>[].obs;
+
+  final QueryOptions recipes = QueryOptions(
+    document: gql(recipeQuery),
+    variables: <String, dynamic>{},
+  );
+
+  Future<String> getRecipes() async {
+    final QueryResult result = await gs.client.query(recipes);
+
+    if (result.hasException) {
+      print(result.exception.toString());
+    }
+
+    return result.data!['allFoodRecipes'].toString();
+  }
+}
+
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    final gs = Provider.of<GraphQLService>(context);
-
+    // final gs = Provider.of<GraphQLService>(context);
+    Get.put(GraphQLService());
+    final gs = Get.find<GraphQLService>();
+  
     final QueryOptions recipes = QueryOptions(
       document: gql(recipeQuery),
       variables: <String, dynamic>{},
@@ -61,6 +87,41 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             child: Text(
               'Go to Mutation Example',
+              style: TextStyle(
+                fontSize: 24.0,
+              ),
+            ),
+            shape: StadiumBorder(
+              side: BorderSide(
+                color: Colors.black,
+                width: 2,
+              ),
+            ),
+          ),
+          SizedBox(height: 50),
+          RaisedButton(
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, "/sample");
+            },
+            child: Text(
+              'Go to Sample',
+              style: TextStyle(
+                fontSize: 24.0,
+              ),
+            ),
+            shape: StadiumBorder(
+              side: BorderSide(
+                color: Colors.black,
+                width: 2,
+              ),
+            ),
+          ),
+            RaisedButton(
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, "/provider");
+            },
+            child: Text(
+              'Go to Provider',
               style: TextStyle(
                 fontSize: 24.0,
               ),
